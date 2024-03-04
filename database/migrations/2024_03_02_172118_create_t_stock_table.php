@@ -6,16 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('t_stock', function (Blueprint $table) {
             $table->id('stock_id');
             $table->unsignedBigInteger('barang_id')->index();
             $table->unsignedBigInteger('user_id')->index();
-            $table->dateTime('stock_tanggal');
+            $table->datetime('stock_tanggal');
             $table->integer('stock_jumlah');
             $table->timestamps();
             $table->foreign('barang_id')->references('barang_id')->on('m_barang');
@@ -23,9 +21,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('t_stock');

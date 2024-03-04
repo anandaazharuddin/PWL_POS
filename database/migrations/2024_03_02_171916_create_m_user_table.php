@@ -20,12 +20,11 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('level_id')->references('level_id')->on('m_level');
+            
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('m_user');

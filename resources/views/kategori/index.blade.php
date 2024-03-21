@@ -21,3 +21,4 @@
 {{$dataTable->scripts()}}
     
 @endpush
+

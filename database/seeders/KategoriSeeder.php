@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class CategorySeeder extends Seeder
+class KategoriSeeder extends Seeder
 {
     
     public function run(): void
@@ -19,6 +19,6 @@ class CategorySeeder extends Seeder
 
 
         ];
-        DB::table('m_category')->insert($data);
+        DB::table('m_kategori')->insert($data);
     }
 }

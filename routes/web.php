@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserController;
-
-
+use PhpOffice\PhpSpreadsheet\Calculation\Kategori;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,3 +24,10 @@ Route::get('/user/ubah/{id}',[UserController::class,'ubah'])->name('/user/ubah')
 Route::get('/user/hapus/{id}',[UserController::class,'hapus'])->name ('/user/hapus');
 Route::get('/user',[UserController::class,'index'])->name ('/user');
 Route::post('/user/tambah_simpan',[UserController::class,'tambah_simpan'])->name ('/user/tambah_simpan');
+
+
+//jobheet 5
+
+
+Route::get('/kategori/create', [KategoriController::class, 'create']);
+Route::post('/kategori', [KategoriController::class, 'store']);

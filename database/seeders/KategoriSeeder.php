@@ -11,11 +11,11 @@ class KategoriSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['category_id' => 1, 'category_nama'=>'Makanan', 'category_kode' => '1' ],
-            ['category_id' => 2, 'category_nama'=>'Minuman', 'category_kode' => '2' ],
-            ['category_id' => 3, 'category_nama'=>'Snack', 'category_kode' => '3' ],
-            ['category_id' => 4, 'category_nama'=>'Peralatan', 'category_kode' => '4'],
-            ['category_id' => 5, 'category_nama'=>'Lain-lain', 'category_kode' => '5'],
+            ['kategori_id' => 1, 'kategori_nama'=>'Makanan', 'kategori_kode' => '1' ],
+            ['kategori_id' => 2, 'kategori_nama'=>'Minuman', 'kategori_kode' => '2' ],
+            ['kategori_id' => 3, 'kategori_nama'=>'Snack', 'kategori_kode' => '3' ],
+            ['kategori_id' => 4, 'kategori_nama'=>'Peralatan', 'kategori_kode' => '4'],
+            ['kategori_id' => 5, 'kategori_nama'=>'Lain-lain', 'kategori_kode' => '5'],
 
 
         ];

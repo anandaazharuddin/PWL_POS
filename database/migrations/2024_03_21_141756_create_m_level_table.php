@@ -20,7 +20,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.php artisan make:migration create_m_level_table --create-m_level
      */
     public function down(): void
     {

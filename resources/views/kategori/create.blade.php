@@ -12,9 +12,6 @@
             <div class="card-header">
                 <h3 class="card-title">Buat kategori baru</h3>
             </div>
-            <a href="{{ route('kategori.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah Kategori
-            </a>
             
             <form method="post" action="../kategori">
                 <div class="card-body">

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriModel;
 use Illuminate\Http\Request;
-use App\DataTable\KategoriDataTable;
+use App\DataTables\KategoriDataTable;
 
 class KategoriController extends Controller
 {
@@ -28,4 +28,50 @@ class KategoriController extends Controller
 
         return redirect('/kategori');
     }
+
+    // public function edit($id)
+    // {
+    //     $kategori = KategoriModel::find($id);
+    //     return view('kategori.edit', ['kategori' => $kategori]);
+    // }
+
+    public function update($id) {
+        $data = KategoriModel::find($id);
+        return view('kategori.update', ['kategori' => $data]);
+    }
+
+    public function update_save(Request $request, $id) {
+        $data = KategoriModel::find($id);
+        $data->kategori_kode = $request->kodeKategori;
+        $data->kategori_nama = $request->namaKategori;
+        $data->save();
+
+        return redirect('/kategori');
+    }
+
+    public function delete($id) {
+        $data = KategoriModel::find($id);
+        $data->delete();
+
+        return redirect('/kategori');
+    }
 }
+
+        // $data = [
+        //     'kategori_kode' => 'SNK',
+        //     'kategori_nama' => 'Snack/Makanan Ringan',
+        //     'created_at' => now()
+        // ];
+        // DB::table('m_kategori')->insert($data);
+        // return 'Insert data baru berhasil';
+
+        // $row = DB::table('m_kategori')->where('kategori_kode', 'SNK')->update(['kategori_nama' => 'Camilan']);
+        // return 'Update data berhasil. Jumlah data yang diupdate: ' . $row . ' baris';
+
+        // $row = DB::table('m_kategori')->where('kategori_kode', 'SNK')->delete();
+        // return 'Delete data berhasil. Jumlah data yang dihapus: ' . $row . ' baris';
+
+//         $data = DB::table('m_kategori')->get();
+//         return view('kategori', ['data' => $data]);
+//     }
+// }

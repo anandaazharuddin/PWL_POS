@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\POScontroller;
 use App\Http\Controllers\UserController;
 use PhpOffice\PhpSpreadsheet\Calculation\Kategori;
 
@@ -35,3 +36,6 @@ Route::post('/kategori', [KategoriController::class, 'store']);
 Route::get('/kategori/update/{id}', [KategoriController::class, 'update'])->name('kategori.update');
 Route::put('/kategori/update_save/{id}', [KategoriController::class, 'update_save'])->name('kategori.update_save');
 Route::get('/kategori/delete/{id}', [KategoriController::class, 'delete'])->name('kategori.delete');
+
+//route js 6 bagian D. CRUD(create, read, update, delete)
+Route::resource('m_user', POScontroller::class);

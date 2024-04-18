@@ -5,6 +5,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\POScontroller;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use PhpOffice\PhpSpreadsheet\Calculation\Kategori;
 
 
@@ -40,3 +41,5 @@ Route::get('/kategori/delete/{id}', [KategoriController::class, 'delete'])->name
 
 //route js 6 bagian D. CRUD(create, read, update, delete)
 Route::resource('m_user', POScontroller::class);
+//js 7 bagian practicum 2 
+Route::get('/', [WelcomeController::class, 'index']);

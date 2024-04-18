@@ -7,6 +7,7 @@ use App\Http\Controllers\POScontroller;
 use App\Http\Controllers\UserController;
 use PhpOffice\PhpSpreadsheet\Calculation\Kategori;
 
+
 Route::get('/', function () {
     return view('welcome');
 });

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\FileUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -49,3 +50,5 @@ Route::resource('kategori', KategoriController::class)->except(['create', 'edit'
 Route::resource('barang', BarangController::class)->except(['create', 'edit']);
 
 Route::post('register1', RegisterController::class)->name('register1');
+Route::get('/file-upload', [FileUploadController::class,'fileUpload']);
+Route::post('/file-upload', [FileUploadController::class,'prosesFileUpload']);

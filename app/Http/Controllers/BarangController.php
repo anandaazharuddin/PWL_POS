@@ -17,7 +17,7 @@ class BarangController extends Controller
      */
     public function index(): Collection
     {
-        return m_barangModel::all();
+        return BarangModel::all();
     }
 
     /**
@@ -40,7 +40,7 @@ class BarangController extends Controller
 
         // Check if file image is present in the request
         if ($request->hasFile('image_barang')) {
-            $barang = m_barangModel::create([
+            $barang = barangModel::create([
                 'kategori_id' => $request->kategori_id,
                 'barang_kode' => $request->barang_kode,
                 'barang_nama' => $request->barang_nama,
@@ -70,7 +70,7 @@ class BarangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(m_barangModel $barang): JsonResponse
+    public function show(barangModel $barang): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -81,7 +81,7 @@ class BarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BarangRequest $request, m_barangModel $barang): JsonResponse
+    public function update(BarangRequest $request, barangModel $barang): JsonResponse
     {
         $isUpdated = $barang->update($request->safe()->all());
 
@@ -101,7 +101,7 @@ class BarangController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(m_barangModel $barang): JsonResponse
+    public function destroy(barangModel $barang): JsonResponse
     {
         try {
             $barang->delete();

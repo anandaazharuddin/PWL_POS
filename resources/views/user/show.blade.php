@@ -1,45 +1,112 @@
-@extends('layout.template')
+@extends('layouts.template')
+
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
-            <div class="card-tools"></div>
+            <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
+            </div>
         </div>
         <div class="card-body">
-            @empty($user)
-                <div class="alert alert-danger alert-dismissible">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
-                    The data you are looking for was not found.
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Filter:</label>
+                        <div class="col-3">
+                            <select class="form-control" id="level_id" required>
+                                <option value="">- Semua -</option>
+                                @foreach($level as $item)
+                                    <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Level Pengguna</small>
+                        </div>
+                    </div>
                 </div>
-            @else
-                <table class="table table-bordered table-striped table-hover table-sm">
-                    <tr>
-                        <th>ID</th>
-                        <td>{{ $user->user_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Level</th>
-                        <td>{{ $user->level->level_nama }}</td>
-                    </tr>
-                    <tr>
-                        <th>Username</th>
-                        <td>{{ $user->username }}</td>
-                    </tr>
-                    <tr>
-                        <th>Nama</th>
-                        <td>{{ $user->nama }}</td>
-                    </tr>
-                    <tr>
-                        <th>Password</th>
-                        <td></td>
-                    </tr>
-                </table>
-            @endempty
-            <a href="{{ url('user') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+            </div>
+            <table class="table table-bordered table-striped table-hover table-sm"
+                   id="table_user">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Nama</th>
+                    <th>Level Pengguna</th>
+                    <th>Gambar</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
 @endsection
 @push('css')
 @endpush
 @push('js')
+    <script>
+        $(document).ready(function () {
+            var dataUser = $('#table_user').DataTable({
+                serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
+                ajax: {
+                    "url": "{{ url('user/list') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": function (d) {
+                        d.level_id = $('#level_id').val();
+                    }
+                },
+                columns: [
+                    {
+                        data: "user_id", // nomor urut dari laravel datatableaddIndexColumn()
+                        className: "text-center",
+                        orderable: true,
+                        searchable: false
+                    }, {
+                        data: "username",
+                        className: "",
+                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                    }, {
+                        data: "nama",
+                        className: "",
+                        orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                    }, {
+                        data: "level.level_nama",
+                        className: "",
+                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                    }, {
+                        data: "image",
+                        className: "text-center",
+                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: false, // searchable: true, jika ingin kolom ini bisa dicari
+                        render: function (data) {
+                            if (data) {
+                                return `<img src="${data}" class="img-thumbnail" alt="Gambar" width="50">`;
+                            } else {
+                                return '<span>No image found!</span>'
+                            }
+                        }
+                    }, {
+                        data: "aksi",
+                        className: "",
+                        orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                        searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                    }
+                ]
+            });
+
+            $('#level_id').on('change', function () {
+                dataUser.ajax.reload();
+            });
+        });
+    </script>
 @endpush

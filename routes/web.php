@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\BarangController;
+use App\Http\Controllers\Api\KategoriController;
+use App\Http\Controllers\Api\LevelController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\m_kategoriController;
@@ -33,27 +37,27 @@ Route::get('/', function () {
 Route::get('/', [WelcomeController::class, 'index']);
 
 Route::prefix('user')->group(function () {
-    Route::get('/', [m_userController::class, 'index']);
-    Route::post('/list', [m_userController::class, 'list']);
-    Route::get('/create', [m_userController::class, 'create']);
-    Route::post('/', [m_userController::class, 'store']);
-    Route::get('/{id}', [m_userController::class, 'show']);
-    Route::get('/{id}/edit', [m_userController::class, 'edit']);
-    Route::put('/{id}', [m_userController::class, 'update']);
-    Route::delete('/{id}', [m_userController::class, 'destroy']);
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/list', [userController::class, 'list']);
+    Route::get('/create', [userController::class, 'create']);
+    Route::post('/', [userController::class, 'store']);
+    Route::get('/{id}', [userController::class, 'show']);
+    Route::get('/{id}/edit', [userController::class, 'edit']);
+    Route::put('/{id}', [userController::class, 'update']);
+    Route::delete('/{id}', [userController::class, 'destroy']);
 });
 
-Route::resource('level', m_levelController::class);
-Route::post('level/list', [m_levelController::class, 'list']);
+Route::resource('level', LevelController::class);
+Route::post('level/list', [levelController::class, 'list']);
 
-Route::resource('kategori', m_kategoriController::class);
-Route::post('kategori/list', [m_kategoriController::class, 'list']);
+Route::resource('kategori', KategoriController::class);
+Route::post('kategori/list', [kategoriController::class, 'list']);
 
-Route::resource('barang', m_barangController::class);
-Route::post('barang/list', [m_barangController::class, 'list']);
+Route::resource('barang', BarangController::class);
+Route::post('barang/list', [barangController::class, 'list']);
 
-Route::resource('stok', t_stokController::class);
-Route::post('stok/list', [t_stokController::class, 'list']);
+Route::resource('stok', stockcontroller::class);
+Route::post('stok/list', [stokController::class, 'list']);
 
 Route::resource('penjualan', TransaksiPenjualanController::class);
 Route::post('penjualan/list', [TransaksiPenjualanController::class, 'list']);
@@ -90,4 +94,3 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('/file-upload', [FileUploadController::class,'fileUpload']);
 Route::post('/file-upload', [FileUploadController::class,'prosesFileUpload']);
-Route::get('/gambar', [FileUploadController::class, 'showGambar'])->name('gambar')->middleware('auth');

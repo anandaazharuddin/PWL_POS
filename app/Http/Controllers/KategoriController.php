@@ -6,40 +6,85 @@ use Illuminate\Http\Request;
 use App\DataTables\KategoriDataTable;
 use App\Models\KategoriModel;
 use Illuminate\Http\RedirectResponse;
+
 use App\Http\Requests\StorePostRequest;
+use App\Models\m_user;
+use Yajra\DataTables\Facades\DataTables;
+
+
 
 class KategoriController extends Controller
 {
-    //index
-    public function index(KategoriDataTable $dataTable)
+
+
+    public function index()
     {
-        // DB::insert('insert into m_kategori(kategori_nama, kategori_kode, created_at) values(?, ?, ?)', ['permen', '89', now()]);
-        // return 'Data berhasil ditambah';
+        $breadcrumb = (object) [
+            'title' => 'Daftar kategori',
+            'list' => ['Home', 'kategori']
+        ];
 
-        //update
-        // $row = DB::table('m_kategori')->where('kategori_kode', '89')->update(['kategori_nama' => 'Permen']);
-        // return 'Data berhasil diupdate. jumlah data yang diupdate: ' . $row;
+        $page = (object) [
+            'title' => 'Daftar user yang terdaftar dalam sistem',
+        ];
 
-        //delete
-        // $row = DB::table('m_kategori')->where('kategori_kode', '89')->delete();
-        // return 'Data berhasil dihapus. jumlah data yang dihapus: ' . $row;
+        $activeMenu = 'kategori';
 
-        //select view
-        // $data = DB::table('m_kategori')->get();
-        // return view('kategori', ['data' => $data]);
+        $kategori = KategoriModel::all();
 
-        // return $dataTable->render('kategori.index');
-
-        return $dataTable->render('kategori.index');
-
-        //tampilkan data datatable
-
+        return view('kategori.index', ['breadcrumb' => $breadcrumb,'kategori'=>$kategori,'page' => $page, 'activeMenu' => $activeMenu]);
 
     }
+
+    //list
+    public function list(Request $request) {
+        $kategoris = KategoriModel::select('kategori_id','kategori_nama', 'kategori_kode');
+
+        $user = m_user::all();
+
+        
+
+        if ($request->level_id) {
+            $user->where('level_id', $request->level_id);
+        }
+
+        return DataTables::of($kategoris)
+            ->addIndexColumn()
+            ->addColumn('action', function ($kategori) {
+                $btn = '<a href="'.url('/user/' . $kategori->kategori_id).'" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="'.url('/user/' . $kategori->kategori_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/'.$kategori->kategori_id).'">'
+                    . csrf_field() . method_field('DELETE') .
+                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure to delete this data?\');">Delete</button></form>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     //create
     public function create()
     {
         return view('kategori.create');
+    }
+
+    public function show(string $id)
+    {
+        $kategori = KategoriModel::find($id);
+
+
+        $breadcrumb = (object) [
+            'title' => 'Detail kategori',
+            'list' => ['Home', 'kategori', 'Detail']
+        ];
+        $page = (object) [
+            'title' => 'Detail user',
+        ];
+
+        $activeMenu = 'user';
+        return view('kategori.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategori' => $kategori, 'activeMenu' => $activeMenu]);
+
+
     }
 
     //store

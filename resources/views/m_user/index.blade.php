@@ -17,11 +17,10 @@
     @endif
     <table class="table table-striped">
         <tr>
-            <th width="20px" class="text-center">User id</th>
+            <th width="20px" class="text-center">kode level </th>
             <th width="150px" class="text-center">Level id</th>
-            <th width="200px"class="text-center">username</th>
-            <th width="200px"class="text-center">nama</th>
-            <th width="150px"class="text-center">password</th>
+            <th width="200px"class="text-center">nama level </th>
+     
             <th class="text-center">Action</th>
         </tr>
         @foreach ($useri as $m_user)

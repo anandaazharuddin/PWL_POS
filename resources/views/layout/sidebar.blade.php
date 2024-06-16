@@ -34,13 +34,13 @@
             </li>
             <li class="nav-header">Data Barang</li>
             <li class="nav-item">
-                <a href="{{ url('/category') }}" class="nav-link {{ $activeMenu == 'category' ? 'active' : '' }} ">
+                <a href="{{ url('/kategori') }}" class="nav-link {{ $activeMenu == 'kategori' ? 'active' : '' }} ">
                     <i class="nav-icon far fa-bookmark"></i>
                     <p>Category Barang</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/item') }}" class="nav-link {{ $activeMenu == 'item' ? 'active' : '' }} ">
+                <a href="{{ url('/barang') }}" class="nav-link {{ $activeMenu == 'item' ? 'active' : '' }} ">
                     <i class="nav-icon far fa-list-alt"></i>
                     <p>Goods Data</p>
                 </a>

@@ -6,15 +6,31 @@ use Illuminate\Http\Request;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use App\Models\LevelModel;
+
 use App\Http\Requests\StorePostRequest;
+use Yajra\DataTables\Facades\DataTables;
 
 
 class UserController extends Controller
 {
     public function index()
     {
-        $user = UserModel::with('level')->get();
-        return view('user', ['data' => $user]);
+        $breadcrumb = (object) [
+            'title' => 'Daftar User',
+            'list' => ['Home', 'User']
+        ];
+
+        $page = (object) [
+            'title' => 'Daftar user yang terdaftar dalam sistem',
+        ];
+
+        $activeMenu = 'user';
+        $level = LevelModel::all();
+
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page,'level'=>$level, 'activeMenu' => $activeMenu]);
+        // $user = UserModel::with('level')->get();
+        // return view('user', ['data' => $user]);
 
         // $user = UserModel::with('level')->get();
         // dd($user);
@@ -146,6 +162,44 @@ class UserController extends Controller
     //         dd($user->wasChanged(['nama','username']));
 
     }
+    public function list(Request $request) {
+        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
+
+        if ($request->level_id) {
+            $users->where('level_id', $request->level_id);
+        }
+
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('action', function ($user) {
+                $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/'.$user->user_id).'">'
+                    . csrf_field() . method_field('DELETE') .
+                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure to delete this data?\');">Delete</button></form>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+    public function edit(string $id)
+    {
+        $user = UserModel::find($id);
+        $level = LevelModel::all();
+
+        $breadcrumb = (object) [
+            'title' => 'Edit User',
+            'list' => ['Home', 'User', 'Edit']
+        ];
+
+        $page = (object) [
+            'title' => 'Edit user',
+        ];
+
+        $activeMenu = 'user';
+
+        return view('user.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'level' => $level, 'activeMenu' => $activeMenu]);
+    }
     public function tambah()
     {
         return view('user_tambah');
@@ -171,26 +225,42 @@ class UserController extends Controller
         return view('user_ubah', ['data' => $user]);
     }
 
-    //ubah simpan
-    // public function ubah_simpan(Request $request)
-    public function ubah_simpan(StorePostRequest $request): RedirectResponse
+    public function destroy(string $id)
+    {
+        $check = UserModel::find($id);
+
+        if (!$check) {
+            return redirect('/user')->with('error', 'Data user tidak ditemukan');
+        }
+
+        try {
+            UserModel::destroy($id);
+            return redirect('/user')->with('success', 'Data user berhasil dihapus');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+        }
+    }
 
 
-{
-    // $id = $request->user_id; // Change from $request->user_id to $request->id
-    // $data = [
-    //     'username' => $request->username,
-    //     'nama' => $request->nama,
-    //     'level_id' => $request->level_id,
-    // ];
 
-    // UserModel::where('user_id', $id)->update($data);
-    $validated = $request->validated();
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'username' => 'required|string|min:3|unique:m_user,username,'.$id.',user_id',
+            'nama' => 'required|string|max:100',
+            'password' => 'nullable|min:5',
+            'level_id' => 'required|integer'
+        ]);
 
-    $validated = $request->safe()->only(['username', 'nama', 'password', 'level_id']);
-    $validated = $request->safe()->except(['username', 'nama', 'password', 'level_id']);
-    return redirect('/user');
-}
+        UserModel::find($id)->update([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/user')->with('success', 'Data user berhasil diubah');
+    }
 
 
     public function hapus($id)
@@ -199,6 +269,24 @@ class UserController extends Controller
         $user->delete();
 
         return redirect('/user');
+
+    }
+
+    public function show(string $id)
+    {
+        $user = UserModel::with('level')->find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Detail User',
+            'list' => ['Home', 'User', 'Detail']
+        ];
+        $page = (object) [
+            'title' => 'Detail user',
+        ];
+
+        $activeMenu = 'user';
+        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
+
 
     }
 

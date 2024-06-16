@@ -24,8 +24,21 @@ class LevelController extends Controller
         // return 'Data berhasil dihapus. jumlah data yang dihapus: ' . $row;
 
         //select
+        $breadcrumb = (object) [
+            'title' => 'Daftar User',
+            'list' => ['Home', 'User']
+        ];
+
+        $page = (object) [
+            'title' => 'Daftar user yang terdaftar dalam sistem',
+        ];
+
+        $activeMenu = 'user';
+
         $data = DB:: select('select * from m_level');
-        return view ('level', ['data' => $data]);
+
+        return view('level', ['breadcrumb' => $breadcrumb,'data'=>$data,'page' => $page, 'activeMenu' => $activeMenu]);
+
      }
 
      public function add() {

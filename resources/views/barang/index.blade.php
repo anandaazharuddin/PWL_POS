@@ -22,14 +22,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group row">
-                    <label for="level_id" class="col-1 control-label col-form-label">Filter:</label>
+                    <label for="kategori_id" class="col-1 control-label col-form-label">Filter:</label>
                     <div class="col-3">
-                        <select class="form-control" id="level_id" name="level_id" required>
+                        <select class="form-control" id="kategori_id" name="kategori_id" required>
                             <option value="">- Semua -</option>
                             @foreach ($kategori as $kat)
                                 <option value="{{ $kat->kategori_id }}">{{ $kat->kategori_nama }}</option>
                             @endforeach
                         </select>
+
                     </div>
                 </div>
             </div>
@@ -37,8 +38,10 @@
         <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
             <thead>
                 <tr>
-                    <th>kategori kode</th>
-                    <th>kategori nama</th>
+                    <th>barang_kode</th>
+                    <th>barang_nama</th>
+                    <th>harga_beli</th>
+                    <th>harga_jual</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -55,22 +58,26 @@
         var dataKategori = $('#table_kategori').DataTable({
             serverSide: true,
             ajax: {
-                "url": "{{ url('kategori/list') }}",
+                "url": "{{ url('barang/list') }}",
                 "dataType": "json",
                 "type": "POST",
                 "data": function (d) {
-                    d.level_id = $('#level_id').val();
+                    d.kategori_id = $('select[name="kategori_id"]').val();
                 }
             },
             columns: [
-                { data: "kategori_kode", className: "", orderable: true, searchable: true },
-                { data: "kategori_nama", className: "", orderable: true, searchable: true },
-                { data: "action", className: "", orderable: false, searchable: false }
+                { data: "barang_kode", className: "", orderable: true, searchable: true },
+                { data: "barang_nama", className: "", orderable: true, searchable: true },
+                { data: "harga_beli", className: "", orderable: true, searchable: true },
+                { data: "harga_jual", className: "", orderable: true, searchable: true },
+                { data: "action", className: "text-center", orderable: false, searchable: false }
             ]
         });
-        $('#level_id').on('change', function() {
-            dataKategori.ajax.reload();
+
+        $('select[name="kategori_id"]').on('change', function() {
+            dataKategori.columns(0).search($(this).val()).draw();
         });
     });
 </script>
+
 @endpush

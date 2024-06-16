@@ -67,9 +67,7 @@
         </div>
     </form>
 @endsection
- 48 changes: 48 additions & 0 deletions48
-resources/views/m_user/index.blade.php
-@@ -0,0 +1,48 @@
+
 @extends('m_user/template')
 @section('content')
     <div class="row mt-5 mb-5">

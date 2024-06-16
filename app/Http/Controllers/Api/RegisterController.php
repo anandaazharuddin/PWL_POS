@@ -16,10 +16,10 @@ class RegisterController extends Controller
          * set validation rule for user request
          */
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'nama' => 'required',
-            'password' => 'required|min:5|confirmed',
-            'level_id' => 'required'
+            'username' => 'nanda',
+            'nama' => 'nanada',
+            'password' => '12345',
+            'level_id' => '1'
         ]);
 
         /**

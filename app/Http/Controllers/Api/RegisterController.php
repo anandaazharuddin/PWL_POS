@@ -16,10 +16,11 @@ class RegisterController extends Controller
          * set validation rule for user request
          */
         $validator = Validator::make($request->all(), [
-            'username' => 'nanda',
-            'nama' => 'nanada',
-            'password' => '12345',
-            'level_id' => '1'
+            'username' => 'required',
+            'nama' => 'required',
+            'password' => 'required|min:5|confirmed',
+            'level_id' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         /**
@@ -48,6 +49,7 @@ class RegisterController extends Controller
             'nama' => $request->nama,
             'password' => bcrypt($request->password),
             'level_id' => $request->level_id,
+            'image' => $request->image->hashName(),
         ]);
 
         /**
